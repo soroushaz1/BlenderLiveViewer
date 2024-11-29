@@ -69,7 +69,7 @@ This will load the `viewer.html` file, allowing you to interact with your Blende
 ## Notes
 - The environment texture must be set in Blender's **World Properties** and connected to an `Environment Texture` node for it to be exported and displayed in the viewer.
 - Make sure you save your Blender file (`Ctrl+S`) to trigger the export.
-
+- This addon has been tested and works with Blender version 3.6.1. Compatibility with other versions may vary.
 ---
 
 ## Troubleshooting
