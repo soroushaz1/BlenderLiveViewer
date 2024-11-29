@@ -12,8 +12,14 @@ This repository contains two files:
 - Customize the background with a toggle to show/hide the environment texture or set a custom color.
 
 ---
-### Tutorial Video
-[![Watch the tutorial on YouTube](https://www.youtube.com/watch?v=IpxbGt_pQ6Q)]
+
+## Tutorial Video
+
+Watch the tutorial video below to learn how to install and use this addon:
+
+[![Watch the tutorial on YouTube](https://img.youtube.com/vi/IpxbGt_pQ6Q/0.jpg)](https://www.youtube.com/watch?v=IpxbGt_pQ6Q)
+
+Click the image above or [watch it on YouTube](https://www.youtube.com/watch?v=IpxbGt_pQ6Q).
 
 ---
 ## Installation and Usage
