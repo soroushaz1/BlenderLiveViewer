@@ -1,4 +1,3 @@
-
 # Blender Live Export Addon with Browser Viewer
 
 This repository contains two files:
@@ -13,7 +12,10 @@ This repository contains two files:
 - Customize the background with a toggle to show/hide the environment texture or set a custom color.
 
 ---
+### Tutorial Video
+[![Watch the tutorial on YouTube](https://www.youtube.com/watch?v=IpxbGt_pQ6Q)]
 
+---
 ## Installation and Usage
 
 ### 1. Clone or Download the Repository
