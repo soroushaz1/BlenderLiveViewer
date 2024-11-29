@@ -82,6 +82,3 @@ This will load the `viewer.html` file, allowing you to interact with your Blende
   - Make sure you are running Blender as an administrator. This is required to start the local HTTP server and save files in restricted directories.
 
 ---
-
-## License
-This project is licensed under the [MIT License](LICENSE).
