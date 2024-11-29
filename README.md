@@ -19,7 +19,7 @@ This repository contains two files:
 ### 1. Clone or Download the Repository
 Clone or download this repository to your local machine:
 ```bash
-git clone https://github.com/soroushaz1/blender-live-export.git
+git clone https://github.com/soroushaz1/LiveViewer.git
 ```
 
 Or download the repository as a ZIP file and extract it.
