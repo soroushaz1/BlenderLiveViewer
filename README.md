@@ -14,16 +14,6 @@ This repository contains two files:
 
 ---
 
-## Tutorial Video
-Watch the tutorial video below to see how to install and use the addon:
-
-<video width="600" controls>
-  <source src="tutorial.mp4" type="video/mp4">
-  Your browser does not support the video tag. [Download the video](tutorial.mp4).
-</video>
-
----
-
 ## Installation and Usage
 
 ### 1. Clone or Download the Repository
