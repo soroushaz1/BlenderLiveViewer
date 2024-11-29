@@ -33,6 +33,8 @@ Copy the `viewer.html` file to your Blender installation path. For example:
 
 This makes it accessible to the HTTP server started by the addon.
 
+**Important:** You must run Blender as an administrator for the addon to work correctly, as it requires permission to start a local HTTP server and write files.
+
 ### 3. Install the Blender Addon
 1. Open Blender.
 2. Go to **Edit > Preferences > Add-ons**.
@@ -46,7 +48,6 @@ This makes it accessible to the HTTP server started by the addon.
    - Export the scene to a `.glb` file every time you save the Blender file (`Ctrl+S`).
    - Start a local HTTP server on port `8000`.
 
-**Important:** You must run Blender as an administrator for the addon to work correctly, as it requires permission to start a local HTTP server and write files.
 
 ### 5. Open the Viewer
 Open your browser and navigate to:
