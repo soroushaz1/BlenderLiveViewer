@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Live Blender Scene Viewer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three/examples/js/loaders/GLTFLoader.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+        #container {
+            width: 100vw;
+            height: 100vh;
+        }
+        #ui {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            color: #000;
+        }
+        #ui label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        #ui input[type="checkbox"] {
+            margin-right: 5px;
+        }
+        #ui input[type="color"] {
+            margin-left: 5px;
+            border: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="container"></div>
+    <div id="ui">
+        <label>
+            <input type="checkbox" id="toggleBackground" checked>
+            Show Background
+        </label>
+        <label>
+            Background Color:
+            <input type="color" id="backgroundColorPicker" value="#ffffff">
+        </label>
+    </div>
+    <script>
+        const container = document.getElementById('container');
+        const toggleBackground = document.getElementById('toggleBackground');
+        const backgroundColorPicker = document.getElementById('backgroundColorPicker');
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(
+            75,
+            window.innerWidth / window.innerHeight,
+            0.1,
+            1000
+        );
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        container.appendChild(renderer.domElement);
+
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.screenSpacePanning = false;
+        controls.minDistance = 1;
+        controls.maxDistance = 100;
+
+        // Add lighting
+        const light1 = new THREE.DirectionalLight(0xffffff, 1);
+        light1.position.set(10, 10, 10);
+        scene.add(light1);
+
+        const light2 = new THREE.AmbientLight(0x404040, 2);
+        scene.add(light2);
+
+        // Load environment texture
+        const pmremGenerator = new THREE.PMREMGenerator(renderer);
+        pmremGenerator.compileEquirectangularShader();
+
+        const envLoader = new THREE.TextureLoader();
+        let environmentMap = null;
+
+        envLoader.load(
+            'http://localhost:8000/environment_texture.jpg',
+            (texture) => {
+                environmentMap = pmremGenerator.fromEquirectangular(texture).texture;
+                scene.environment = environmentMap; // Set environment map
+                if (toggleBackground.checked) {
+                    scene.background = environmentMap; // Set background by default
+                }
+                texture.dispose();
+                pmremGenerator.dispose();
+            },
+            undefined,
+            (err) => {
+                console.error('Error loading environment texture:', err);
+            }
+        );
+
+        // Load GLB model
+        const loader = new THREE.GLTFLoader();
+        let model;
+        const EXPORT_FILE_NAME = "blender_live_scene.glb";
+
+        function loadModel() {
+            loader.load(
+                `http://localhost:8000/${EXPORT_FILE_NAME}`,
+                (gltf) => {
+                    if (model) scene.remove(model);
+                    model = gltf.scene;
+                    scene.add(model);
+                    camera.position.set(3, 3, 5);
+                    controls.target.set(0, 0, 0);
+                    controls.update();
+                },
+                undefined,
+                (error) => {
+                    console.error(error);
+                }
+            );
+        }
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        // Handle background toggle
+        toggleBackground.addEventListener('change', () => {
+            if (toggleBackground.checked) {
+                scene.background = environmentMap || new THREE.Color(backgroundColorPicker.value);
+            } else {
+                scene.background = new THREE.Color(backgroundColorPicker.value);
+            }
+        });
+
+        // Handle background color picker
+        backgroundColorPicker.addEventListener('input', () => {
+            if (!toggleBackground.checked || !environmentMap) {
+                scene.background = new THREE.Color(backgroundColorPicker.value);
+            }
+        });
+
+        // Periodically check for updates
+        setInterval(() => {
+            fetch(`http://localhost:8000/${EXPORT_FILE_NAME}`, { method: 'HEAD' })
+                .then((response) => {
+                    const newModified = response.headers.get('Last-Modified');
+                    if (lastModified && lastModified !== newModified) {
+                        location.reload();
+                    }
+                    lastModified = newModified;
+                })
+                .catch((err) => console.error('Error checking file:', err));
+        }, 1000);
+
+        let lastModified = null;
+
+        loadModel();
+        animate();
+
+        // Handle window resize
+        window.addEventListener('resize', onWindowResize, false);
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+    </script>
+</body>
+</html>
