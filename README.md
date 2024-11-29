@@ -46,6 +46,8 @@ This makes it accessible to the HTTP server started by the addon.
    - Export the scene to a `.glb` file every time you save the Blender file (`Ctrl+S`).
    - Start a local HTTP server on port `8000`.
 
+**Important:** You must run Blender as an administrator for the addon to work correctly, as it requires permission to start a local HTTP server and write files.
+
 ### 5. Open the Viewer
 Open your browser and navigate to:
 ```
@@ -75,6 +77,8 @@ This will load the `viewer.html` file, allowing you to interact with your Blende
   - Check if the HTTP server is running (messages appear in the Blender console).
 - **Environment Texture Not Visible**:
   - Ensure an `Environment Texture` node is connected in the World Properties of the Blender scene.
+- **Addon Fails to Start**:
+  - Make sure you are running Blender as an administrator. This is required to start the local HTTP server and save files in restricted directories.
 
 ---
 
